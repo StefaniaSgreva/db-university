@@ -1,0 +1,37 @@
+
+1. Contare quanti iscritti ci sono stati ogni anno
+2. Contare gli insegnanti che hanno l'ufficio nello stesso edificio
+3. Calcolare la media dei voti di ogni appello d'esame
+4. Contare quanti corsi di laurea ci sono per ogni dipartimento
+
+**********************************************************************************************************************
+**********************************************************************************************************************
+
+// esempi GROUP  lezione
+
+1. Contare i corsi raggruppati per cfu
+
+SELECT COUNT(`id`) AS `totale_corsi_per_cfu` , `cfu`
+FROM `courses`
+GROUP BY `cfu`;
+
+2. Contare gli studenti raggruppati per anno di nascita
+
+SELECT COUNT(`id`) AS `studenti` , YEAR (`date_of_birth`) AS `anno_di_nascita`
+FROM `students`
+GROUP BY `anno_di_nascita`; // o YEAR (`date_of_birth`) se non ho messo l'alias ma con l'alias è più pulito
+
+3. Selezionare il voto più basso dato ad ogni appello d'esame
+
+SELECT MIN(vote) AS `voto_peggiore`, `exam_id`
+FROM `exam_student`
+GROUP BY `exam_id
+
+4. Contare gli appelli d'esame del mese di luglio raggruppati per giorno
+
+SELECT COUNT(`id`) AS `numero_appelli`, DAY (`date`) AS `giorno`  
+FROM `exams`
+WHERE MONTH(`date`) = 7
+GROUP BY DAY (`date`);
+
+
