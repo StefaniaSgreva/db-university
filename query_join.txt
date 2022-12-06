@@ -1,11 +1,66 @@
 
 1. Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+
+SELECT `students`.* 
+FROM `students`
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+WHERE `degrees`.`name` = "Corso di Laurea in Economia";
+
 2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+
+SELECT `degrees`.* 
+FROM `degrees`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`
+WHERE `departments`.`name` = "Dipartimento di Neuroscienze" 
+AND `degrees`.`level` = "magistrale";
+
 3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+
+SELECT `courses`.`name`,`courses`.`description`, `courses`.`period`,`courses`.`year`,`courses`.`cfu`, `courses`.`website`
+FROM `course_teacher`
+INNER JOIN `courses`
+ON `course_teacher`.`course_id` = `courses`.`id`
+WHERE `teacher_id` = 44;
+
 4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il
-relativo dipartimento, in ordine alfabetico per cognome e nome
+   relativo dipartimento, in ordine alfabetico per cognome e nome
+
+SELECT `students`.`name` AS `nome_studente`, `students`.`surname` AS `cognome_studente`,`degrees`.`name` AS `corso_di_laurea`, `departments`.`name` AS `dipartimento`
+FROM `students`
+INNER JOIN `degrees`
+ON `students`.`degree_id` = `degrees`.`id`
+INNER JOIN `departments`
+ON `degrees`.`department_id` = `departments`.`id`  
+ORDER BY `students`.`surname`,`students`.`name`; 
+
 5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
+
+SELECT `degrees`.`name` AS `corso_di_laurea`, `courses`.`name` AS `corso`, `teachers`.`name` AS `nome_insegnante`, `teachers`.`surname` AS `cognome_insegnante`
+FROM `courses`
+INNER JOIN `degrees`
+ON `courses`.`degree_id` = `degrees`.`id`
+INNER JOIN `course_teacher`
+ON `courses`.`id` = `course_teacher`.`course_id`
+INNER JOIN `teachers`
+ON `teacher_id` = `teachers`.`id`
+ORDER BY `degrees`.`name`;
+
 6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+
+SELECT DISTINCT `teachers`.`name` AS `nome_docente`, `teachers`.`surname` AS `cognome_docente`, `departments`.`name` AS `dipartimento`
+FROM `teachers`
+INNER JOIN `course_teacher`
+ON `teachers`.`id` = `course_teacher`.`teacher_id`
+INNER JOIN `courses`
+ON `course_teacher`.`course_id` = `courses`.`id`
+INNER JOIN `degrees`
+ON `degrees`.`id` = `courses`.`degree_id`
+INNER JOIN `departments` 
+ON `degrees`.`department_id` = `departments`.`id`
+WHERE `departments`.`name` = 'Dipartimento di Matematica';
+
 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per
 superare ciascuno dei suoi esami
 
@@ -17,19 +72,33 @@ superare ciascuno dei suoi esami
 1. Selezionare tutti i corsi del Corso di Laurea in Informatica (22)
 2. Selezionare le informazioni sul corso con id = 144, con tutti i relativi appelli d’esame
 
-SELECT *
+SELECT `exams`.`id` AS `exam_id`, `exams`.`date`, `exams`.`hour`
 FROM `courses`
-JOIN
-ON
-WHERE `courses`.`id`= 144
+JOIN `exams`
+ON `courses`.`id` = `exams`.`course_id`
+WHERE `courses`.`id`= 144;
 
 
 
 3. Selezionare a quale dipartimento appartiene il Corso di Laurea in Diritto
 dell'Economia (Dipartimento di Scienze politiche, giuridiche e studi internazionali)
 
+SELECT `departments`
+FROM `departments`
+JOIN `degrees`
+ON `departments`.`id` = `degrees`.`department_id`
+WHERE `degrees`.`name`= 'Corso di LAurea in Diritto dell'/Economia';
 
 4. Selezionare tutti gli appelli d'esame del Corso di Laurea Magistrale in Fisica del primo anno
+
+SELECT `courses`.`name`,`courses`.`period`,`courses`.`cfu`,`exams`.`date`,`exams`.`hour`, `exams`.`location`, `exams`.`address`
+FROM `degrees`
+JOIN `courses`
+ON `degrees`.`id` = `courses`.`degrees_id`
+JOIN `exams`
+ON `courses`.`id` = `exams`.`course_id`
+WHERE `courses`.`year`= 1
+AND `degrees`.`name` = 'orso di Laurea Magistrale in Fisica';
 
 5. Selezionare tutti i docenti che insegnano nel Corso di Laurea in Lettere (21)
 
