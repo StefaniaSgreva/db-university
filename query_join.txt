@@ -63,6 +63,19 @@ WHERE `departments`.`name` = 'Dipartimento di Matematica';
 
 7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per
 superare ciascuno dei suoi esami
+//N.B NON SI PUO' USARE WHERE DOVE ABBIAMO UN RAGGRUPPAMENTO MA HAVING!(PERCHè è UN DATO AGGREGATO)
+
+SELECT `students`.`id`, `students`.`name` ,`students`.`surname` , `courses`.`name` AS `nome_corso` , COUNT(`exam_student`.`vote`) AS `n_tentativi`, MAX(`exam_student`.`vote`) AS `voto_massimo` 
+FROM `students` 
+INNER JOIN `exam_student` 
+ON `exam_student`.`student_id` = `students`.`id` 
+INNER JOIN `exams` 
+ON `exams`.`id` = `exam_student`.`exam_id` 
+INNER JOIN `courses` 
+ON `courses`.`id` = `exams`.`course_id` 
+GROUP BY `students`.`id`, `courses`.`name` 
+HAVING `voto_max` >= 18 
+ORDER BY `students`.`id`;
 
 **********************************************************************************************************************
 **********************************************************************************************************************
